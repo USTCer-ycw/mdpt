@@ -31,8 +31,6 @@ namespace Mdpt
         PcapMessageCB message_;
         bool quit_;
     };
-
-
 }
 
 #endif //MDPT_PCAP_H

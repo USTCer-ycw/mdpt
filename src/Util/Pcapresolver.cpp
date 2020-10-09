@@ -64,15 +64,15 @@ void PcapResolver::defaultMessage(const PcapPtr &ptr)
 void PcapResolver::poller()
 {
     assert(handle_!=nullptr);
-    int status = pcap_next_ex(handle_, const_cast<pcap_pkthdr **>(&header_), &data_);
-    PcapPtr Ptr = shared_from_this();
+    int status = pcap_next_ex(handle_, &header_, &data_);
+    PcapPtr PtrGuard = shared_from_this();
     while (!quit_ && status == 1)
     {
-        message_(Ptr);
-        status = pcap_next_ex(handle_, const_cast<pcap_pkthdr **>(&header_), &data_);
+        message_(PtrGuard);
+        status = pcap_next_ex(handle_, &header_, &data_);
     }
     if( status == 1)
     {
-        message_(Ptr);
+        message_(PtrGuard);
     }
 }

@@ -96,4 +96,48 @@ void readfile()
 //    }
 }
 
+namespace useless
+{
+    uint64_t current_pkt = 0;
+    int lookupdev()
+    {
+        char* dev;
+        char errbuf[PCAP_ERRBUF_SIZE];
+
+        dev = pcap_lookupdev(errbuf);
+
+        if (NULL == dev)
+        {
+            fprintf(stdout, "error:%s\n", errbuf);
+            return (EXIT_FAILURE);
+        }
+        printf("device:%s\n", dev);
+        return (EXIT_SUCCESS);
+    }
+
+
+    int printPktHeader(PCAP_PKTHEADER *pktHeader)
+    {
+        fprintf(stdout, "cap_time:%u, ", (unsigned int)pktHeader->ts.tv_sec);
+        fprintf(stdout, "pkt length:%u, ", pktHeader->len);
+        fprintf(stdout, "cap length:%u\n", pktHeader->caplen);
+    }
+
+    void lihui_callback(u_char *argument, const struct pcap_pkthdr *header, const u_char *data)
+    {
+        fprintf(stdout, "cap_time:%u, ", (unsigned int)header->ts.tv_sec);
+
+        u_char* temp = const_cast<u_char*>(data);
+        string sip = getSrcIp(temp);
+        string dip = getDstIp(temp);
+        uint64_t seqnum = getSeqnum(temp);
+        u_char* payload = getPayload(temp);
+        printf("The %d packet length: %d\n", ++current_pkt, header->len);
+        printf("src ip: %s,dst ip: %s\n",    sip.c_str(), dip.c_str());
+        printf("The packet sequence number and data: %d, %x\n", seqnum, *payload);
+    }
+
+
+}
+
 

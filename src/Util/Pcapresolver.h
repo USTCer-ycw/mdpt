@@ -29,7 +29,7 @@ namespace Mdpt
     private:
         u_char * argument_;
         pcap_t *handle_;
-        const struct pcap_pkthdr* header_;
+        struct pcap_pkthdr* header_;
         const u_char * data_;
         bool quit_;
         PcapMessageCB message_;
