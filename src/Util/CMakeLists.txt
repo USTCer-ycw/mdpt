@@ -1,9 +1,11 @@
+#
+#set(util_srcs
+#	Util.h
+#	Util.cc
+#	Types.h
+#)
 
-set(util_srcs
-	Util.h
-	Util.cc
-	Types.h
-)
+aux_source_directory(. util_srcs)
 
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/include)

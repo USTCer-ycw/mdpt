@@ -10,10 +10,14 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string>
+#include <iostream>
 #include "src/Util/Util.h"
+//#include "src/Util/Pcap.h"
+#include "src/Util/Pcapresolver.h"
 
 using std::string;
-
+using std::cout;
+using std::endl;
 
 uint64_t current_pkt = 0;
 
@@ -55,34 +59,20 @@ int lookupdev()
 	return (EXIT_SUCCESS);
 }
 
-void test()
+void message(const Mdpt::PcapResolver::PcapPtr& Ptr)
 {
-	//open the dumped cap file
-    string filename = "haitong_sp.pcap";
-
-    pcap_t* handle = NULL;
-
-    open_pcap_file(&handle,filename.c_str());
-
-    u_char * ptr = (u_char*)handle;
-    ptr += 14;
-
-    pcap_loop(handle, -1, (pcap_handler)lihui_callback, (u_char*)handle);
-
-    //read the cap file , and print the every captured packet summary
-
-    //close the handle
-    pcap_close(handle);
+    std::cout << Ptr->getSeqnum() << std:: endl;
+    cout << Ptr->getSrcIp() << endl;
+    cout << Ptr->getDstIp() << endl;
 }
-
-
 
 int main(int argc, char *argv[])
 {
     fprintf(stdout, "beg time=%d\n", time(0));
-
-	test();
-
+    Mdpt::Pcap pcap;
+    pcap.open_pcap_file("haitong_sp.pcap");
+//    pcap.setCallBack(std::bind(message, std::placeholders::_1));
+    pcap.loop();
     fprintf(stdout, "end time=%d\n", time(0));
 	return (EXIT_SUCCESS);
 }

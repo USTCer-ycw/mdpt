@@ -15,6 +15,7 @@ add_definitions(-DUSE_DL_PREFIX)
 
 if(UNIX)
 	add_definitions(-D__LINUX__)
+	add_definitions("-g")
 	set(Debug_Mode $ENV{Debug_Mode})
 	if(Debug_Mode STREQUAL "ON")
 		message("************* build debug version *********")
