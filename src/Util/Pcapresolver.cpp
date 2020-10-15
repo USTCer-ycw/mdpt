@@ -38,16 +38,17 @@ string PcapResolver::getSrcIp()
 
 string PcapResolver::getDstIp()
 {
-    struct packet_ip* ip = static_cast<packet_ip*>(implicit_cast<void*>(data_ + SIZE_ETHERNET));
+    u_char *data = const_cast<u_char *>(data_);
+    struct packet_ip* ip = static_cast<packet_ip*>(implicit_cast<void*>(data + SIZE_ETHERNET));
     return inet_ntoa(ip->ip_dst);
 }
 
 u_char * PcapResolver::getPayload()
 {
     u_char *data = const_cast<u_char *>(data_);
-    struct packet_ip* ip = static_cast<packet_ip*>(implicit_cast<void*>(data_ + SIZE_ETHERNET));
+    struct packet_ip* ip = static_cast<packet_ip*>(implicit_cast<void*>(data + SIZE_ETHERNET));
     u_char ipheaderlen = IP_HL(ip) << 2;
-    struct packet_tcp* tcp = static_cast<packet_tcp*>(implicit_cast<void*>(data_ + SIZE_ETHERNET + ipheaderlen));
+    struct packet_tcp* tcp = static_cast<packet_tcp*>(implicit_cast<void*>(data + SIZE_ETHERNET + ipheaderlen));
     u_char tcpheaderlen = TH_OFF(tcp) << 2;
     return data + SIZE_ETHERNET + ipheaderlen + tcpheaderlen;
 }
