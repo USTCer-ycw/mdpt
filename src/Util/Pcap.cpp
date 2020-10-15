@@ -69,7 +69,7 @@ bool Pcap::setsrcfilter(char *filterIP)
 void Pcap::loop()
 {
     assert(handle_!=nullptr);
-    assert(pcapPtr.get() != nullptr);
+    assert(pcapPtr_.get() != nullptr);
     pcapPtr_->poller();
 //    int status = pcap_next_ex(handle_, const_cast<pcap_pkthdr **>(&header_), &data_);
 //    while (!quit_)
